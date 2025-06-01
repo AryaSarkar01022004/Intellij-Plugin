@@ -1,0 +1,49 @@
+<idea-plugin>
+    <id>com.example.kotlin-todo-tracker</id>
+    <name>Kotlin TODO Tracker</name>
+    <vendor email="your.email@example.com" url="https://github.com/yourusername">Your Name</vendor>
+
+    <description><![CDATA[
+    A plugin that scans Kotlin files for TODO comments, highlights them in the editor,
+    and provides a convenient side panel for navigation and management.
+    
+    Features:
+    - Automatic TODO detection in Kotlin files
+    - Inline highlighting in the editor
+    - Side panel with clickable TODO list
+    - Persistent state between IDE restarts
+    - Keyword filtering
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Tool Window -->
+        <toolWindow id="TODO Tracker" 
+                   secondary="true" 
+                   anchor="right" 
+                   factoryClass="com.example.kotlintodo.TodoToolWindowFactory"/>
+        
+        <!-- Annotator for highlighting -->
+        <annotator language="kotlin" 
+                  implementationClass="com.example.kotlintodo.TodoHighlightAnnotator"/>
+        
+        <!-- File listener for automatic updates -->
+        <postStartupActivity implementation="com.example.kotlintodo.TodoStartupActivity"/>
+    </extensions>
+
+    <actions>
+        <action id="RefreshTodos" 
+               class="com.example.kotlintodo.RefreshTodosAction" 
+               text="Refresh TODOs" 
+               description="Refresh the TODO list">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+
+    <applicationListeners>
+        <listener class="com.example.kotlintodo.TodoFileListener"
+                 topic="com.intellij.openapi.vfs.VirtualFileListener"/>
+    </applicationListeners>
+</idea-plugin>
